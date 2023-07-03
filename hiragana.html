@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  font-family: "MS Pゴシック" ;
+}
+</style>
+<script>
+    // 好きだから連想配列にしているだけで
+    // 配列でも問題は無い
+    const COLOR_TABLE = {
+        0 : "#FFFFFF", // 白
+        1 : "#6495ed",
+        2 : "#1e90ff",
+        3 : "#4169e1",
+        4 : "#00bfff",
+        5 : "#00ffff",
+        6 : "#adff2f",
+        7 : "#6495ed",
+        8 : "#6495ed",
+        9 : "#6495ed",
+        10 : "#6495ed",
+        11 : "#6495ed",
+        12 : "#6495ed",
+        13 : "#6495ed",
+        14 : "#6495ed",
+        15 : "#6495ed",
+        16 : "#6495ed",
+        17 : "#6495ed",
+        18 : "#6495ed",
+        19 : "#6495ed",
+        20 : "#6495ed",
+        21 : "#6495ed",
+        22 : "#6495ed",
+        23 : "#6495ed",
+        24 : "#6495ed",
+        25 : "#dc143c",
+    }
+    var sum = 0
+    // 加算する方
+    function hiragana_click(table_data){
+        var count = parseInt(table_data.dataset.count)
+        // countアップ
+        count++
+        // 色定義の最大値まで処理
+        if( count <= Object.keys(COLOR_TABLE).length ) {
+            table_data.dataset.count = count
+            color_change(table_data)
+            sum++
+            sum_td_change()
+        }
+    }
+    // 減算するほう
+    function hiragana_leftclick(table_data){
+        var count = parseInt(table_data.dataset.count)
+        // countダウン
+        count--
+        // 0以下の場合は処理しない
+        if ( count >= 0) {
+            table_data.dataset.count = count
+            color_change(table_data)
+            sum--
+            sum_td_change()
+        }
+        event.preventDefault(); // テキストメニューを出さないため
+    }
+    function color_change(table_data) {
+        table_data.style.backgroundColor = COLOR_TABLE[table_data.dataset.count]
+    }
+    function sum_td_change(){
+        var td_items = document.getElementsByName("sum_td")
+        td_items[0].innerText = sum
+    }
+    // 表示を数字に切り替える
+    function view_count() {
+        var td_items = document.getElementsByName("td_hiragana")
+        for( var i = 0; i < td_items.length; i++  ){
+            td_items[i].innerText = td_items[i].dataset.count
+        }
+    }
+    // 表示をひらがなに切り替える
+    function view_hiragana() {
+        var td_items = document.getElementsByName("td_hiragana")
+        for( var i = 0; i < td_items.length; i++  ){
+            td_items[i].innerText = td_items[i].dataset.hiragana
+        }
+    }
+    
+</script>
+<title>あいうえおカウント</title>
+</head>
+<body>
+<table border="2" cellspacing="0" style="font-size: 24pt; border-color:#4b0082; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+    <tr>
+        <td name="td_hiragana" data-count="0" data-hiragana="わ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">わ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ら" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ら</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="や" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">や</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ま" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ま</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="は" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">は</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="な" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">な</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="た" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">た</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="さ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">さ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="か" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">か</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="あ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">あ</td>
+    </tr>
+    <tr>
+        <td name="td_space">　</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="り" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">り</td>
+        <td name="td_space">　</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="み" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">み</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ひ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ひ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="に" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">に</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ち" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ち</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="し" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">し</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="き" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">き</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="い" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">い</td>
+    </tr>
+    <tr>
+        <td name="td_hiragana" data-count="0" data-hiragana="を" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">を</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="る" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">る</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ゆ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ゆ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="む" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">む</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ふ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ふ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ぬ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ぬ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="つ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">つ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="す" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">す</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="く" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">く</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="う" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">う</td>
+    </tr>
+    <tr>
+        <td name="td_space">　</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="れ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">れ</td>
+        <td name="td_space">　</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="め" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">め</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="へ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">へ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ね" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ね</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="て" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">て</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="せ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">せ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="け" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">け</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="え" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">え</td>
+    </tr>
+    <tr>
+        <td name="td_hiragana" data-count="0" data-hiragana="ん" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ん</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ろ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ろ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="よ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">よ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="も" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">も</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="ほ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ほ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="の" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">の</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="と" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">と</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="そ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">そ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="こ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">こ</td>
+        <td name="td_hiragana" data-count="0" data-hiragana="お" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">お</td>
+    </tr>
+</table>
+<br><br><br><br><br><br>
+<!--<button onclick="view_count();" >カウント表示</button>
+<button onclick="view_hiragana();">ひらがな表示</button> -->
+<br>
+<table>
+    <tr>
+        <th>合計</th><td name="sum_td">0</td>
+    </tr>
+</table>
+</body>
+</html>
