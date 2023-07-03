@@ -63,10 +63,10 @@ body {
         let count = parseInt(table_data.dataset.count)
         // ひらがな要素毎のカウントダウン
         count--
-        // 全体件数は減らす
-        sum_td_change(-1)
+                
         // 0以下の場合は処理しない
         if ( count >= 0) {
+            sum_td_change(-1)
             table_data.dataset.count = count
             color_change(table_data)
         }
