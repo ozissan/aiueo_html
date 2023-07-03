@@ -16,84 +16,89 @@ body {
 <script>
     // 好きだから連想配列にしているだけで
     // 配列でも問題は無い
-    const COLOR_TABLE = {
-        0 : "#FFFFFF", // 白
-        1 : "#6495ed",
-        2 : "#1e90ff",
-        3 : "#4169e1",
-        4 : "#00bfff",
-        5 : "#00ffff",
-        6 : "#adff2f",
-        7 : "#6495ed",
-        8 : "#6495ed",
-        9 : "#6495ed",
-        10 : "#6495ed",
-        11 : "#6495ed",
-        12 : "#6495ed",
-        13 : "#6495ed",
-        14 : "#6495ed",
-        15 : "#6495ed",
-        16 : "#6495ed",
-        17 : "#6495ed",
-        18 : "#6495ed",
-        19 : "#6495ed",
-        20 : "#6495ed",
-        21 : "#6495ed",
-        22 : "#6495ed",
-        23 : "#6495ed",
-        24 : "#6495ed",
-        25 : "#dc143c",
-    }
-    var sum = 0
+    const COLOR_TABLE = [
+        "#FFFFFF", // 白
+        "#6495ed",
+        "#1e90ff",
+        "#4169e1",
+        "#00bfff",
+        "#00ffff",
+        "#adff2f",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#6495ed",
+        "#dc143c",
+    ]
     // 加算する方
     function hiragana_click(table_data){
-        var count = parseInt(table_data.dataset.count)
-        // countアップ
+        let count = parseInt(table_data.dataset.count)
+        // ひらがな要素毎のカウントアップ
         count++
-        // 色定義の最大値まで処理
-        if( count <= Object.keys(COLOR_TABLE).length ) {
-            table_data.dataset.count = count
+        // 全体件数は増やす
+        sum_td_change(1)
+        table_data.dataset.count = count
+        // 色定義の最大値までは変更する
+        if( count < Object.keys(COLOR_TABLE).length ) {
+            // table_data.dataset.count = count // 要素別は色数以上増やしたくない場合はこっちだけあける
             color_change(table_data)
-            sum++
-            sum_td_change()
         }
     }
     // 減算するほう
     function hiragana_leftclick(table_data){
-        var count = parseInt(table_data.dataset.count)
-        // countダウン
+        let count = parseInt(table_data.dataset.count)
+        // ひらがな要素毎のカウントダウン
         count--
+        // 全体件数は減らす
+        sum_td_change(-1)
         // 0以下の場合は処理しない
         if ( count >= 0) {
             table_data.dataset.count = count
             color_change(table_data)
-            sum--
-            sum_td_change()
         }
         event.preventDefault(); // テキストメニューを出さないため
     }
     function color_change(table_data) {
         table_data.style.backgroundColor = COLOR_TABLE[table_data.dataset.count]
     }
-    function sum_td_change(){
-        var td_items = document.getElementsByName("sum_td")
+    function sum_td_change(num){
+        let td_items = document.getElementsByName("sum_td")
+        let sum = parseInt(td_items[0].dataset.total_count) + num
+        // 現在の合計と引数の合計値が0以下の場合は更新処理を行わない
+        if( sum  < 0 ) {
+            return
+        }
+        td_items[0].dataset.total_count = sum 
         td_items[0].innerText = sum
     }
     // 表示を数字に切り替える
     function view_count() {
-        var td_items = document.getElementsByName("td_hiragana")
-        for( var i = 0; i < td_items.length; i++  ){
+        let td_items = document.getElementsByName("td_hiragana")
+        for( let i = 0; i < td_items.length; i++  ){
             td_items[i].innerText = td_items[i].dataset.count
         }
     }
     // 表示をひらがなに切り替える
     function view_hiragana() {
-        var td_items = document.getElementsByName("td_hiragana")
-        for( var i = 0; i < td_items.length; i++  ){
+        let td_items = document.getElementsByName("td_hiragana")
+        for( let i = 0; i < td_items.length; i++  ){
             td_items[i].innerText = td_items[i].dataset.hiragana
         }
     }
-    
 </script>
 <title>あいうえおカウント</title>
 </head>
@@ -166,7 +171,7 @@ body {
 <br>
 <table>
     <tr>
-        <th>合計</th><td name="sum_td">0</td>
+        <th>合計</th><td name="sum_td" data-total_count="0">0</td>
     </tr>
 </table>
 </body>
