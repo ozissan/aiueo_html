@@ -1,178 +1,317 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<style>
-body {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  font-family: "MS Pゴシック" ;
-}
-</style>
-<script>
-    // 先頭0→白
-    // 以降1ずつカウントアップ
-    const COLOR_TABLE = [
-        "#FFFFFF", // 白
-        "#6495ed",
-        "#1e90ff",
-        "#4169e1",
-        "#00bfff",
-        "#00ffff",
-        "#adff2f",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#6495ed",
-        "#dc143c",
-    ]
-    // 加算する方
-    function hiragana_click(table_data){
-        let count = parseInt(table_data.dataset.count)
-        // ひらがな要素毎のカウントアップ
-        count++
-        // 全体件数は増やす
-        sum_td_change(1)
-        table_data.dataset.count = count
-        // 色定義の最大値までは変更する
-        if( count < Object.keys(COLOR_TABLE).length ) {
-            // table_data.dataset.count = count // 要素別は色数以上増やしたくない場合はこっちだけあける
-            color_change(table_data)
+    <meta charset="UTF-8">
+    <style>
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            font-family: "MS Pゴシック";
         }
-    }
-    // 減算するほう
-    function hiragana_leftclick(table_data){
-        let count = parseInt(table_data.dataset.count)
-        // ひらがな要素毎のカウントダウン
-        count--
-                
-        // 0以下の場合は処理しない
-        if ( count >= 0) {
-            sum_td_change(-1)
+    </style>
+    <script>
+        // 先頭0→白
+        // 以降1ずつカウントアップ
+        const COLOR_TABLE = [
+            "#FFFFFF", // 白
+            "#6495ed",
+            "#1e90ff",
+            "#4169e1",
+            "#00bfff",
+            "#00ffff",
+            "#adff2f",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#6495ed",
+            "#dc143c",
+        ]
+        // 加算する方
+        function char_click(table_data) {
+            let count = parseInt(table_data.dataset.count)
+            // ひらがな要素毎のカウントアップ
+            count++
+            // 全体件数は増やす
+            sum_td_change(1)
             table_data.dataset.count = count
-            color_change(table_data)
+            // 色定義の最大値までは変更する
+            if (count < Object.keys(COLOR_TABLE).length) {
+                // table_data.dataset.count = count // 要素別は色数以上増やしたくない場合はこっちだけあける
+                color_change(table_data)
+            }
         }
-        event.preventDefault(); // テキストメニューを出さないため
-    }
-    function color_change(table_data) {
-        table_data.style.backgroundColor = COLOR_TABLE[table_data.dataset.count]
-    }
-    function sum_td_change(num){
-        let td_items = document.getElementsByName("sum_td")
-        let sum = parseInt(td_items[0].dataset.total_count) + num
-        // 現在の合計と引数の合計値が0以下の場合は更新処理を行わない
-        if( sum  < 0 ) {
-            return
+        // 減算するほう
+        function char_leftclick(table_data) {
+            let count = parseInt(table_data.dataset.count)
+            // ひらがな要素毎のカウントダウン
+            count--
+
+            // 0以下の場合は処理しない
+            if (count >= 0) {
+                sum_td_change(-1)
+                table_data.dataset.count = count
+                color_change(table_data)
+            }
+            event.preventDefault(); // テキストメニューを出さないため
         }
-        td_items[0].dataset.total_count = sum 
-        td_items[0].innerText = sum
-    }
-    // 表示を数字に切り替える
-    function view_count() {
-        let td_items = document.getElementsByName("td_hiragana")
-        for( let i = 0; i < td_items.length; i++  ){
-            td_items[i].innerText = td_items[i].dataset.count
+        function color_change(table_data) {
+            table_data.style.backgroundColor = COLOR_TABLE[table_data.dataset.count]
         }
-    }
-    // 表示をひらがなに切り替える
-    function view_hiragana() {
-        let td_items = document.getElementsByName("td_hiragana")
-        for( let i = 0; i < td_items.length; i++  ){
-            td_items[i].innerText = td_items[i].dataset.hiragana
+        function sum_td_change(num) {
+            let td_items = document.getElementsByName("sum_td")
+            let sum = parseInt(td_items[0].dataset.total_count) + num
+            // 現在の合計と引数の合計値が0以下の場合は更新処理を行わない
+            if (sum < 0) {
+                return
+            }
+            td_items[0].dataset.total_count = sum
+            td_items[0].innerText = sum
         }
-    }
-</script>
-<title>あいうえおカウント</title>
+        // 表示を数字に切り替える
+        function view_count() {
+            let td_items = document.getElementsByName("td_char")
+            for (let i = 0; i < td_items.length; i++) {
+                td_items[i].innerText = td_items[i].dataset.count
+            }
+        }
+        // 表示をひらがなに切り替える
+        function view_char() {
+            let td_items = document.getElementsByName("td_char")
+            for (let i = 0; i < td_items.length; i++) {
+                td_items[i].innerText = td_items[i].dataset.char
+            }
+        }
+        // 現在の数が多い順にひらがなを表示を更新する
+        function view_char_rank() {
+            let td_items = document.getElementsByName("td_char")
+            for (let i = 0; i < td_items.length; i++) {
+                td_items[i].innerText = td_items[i].dataset.char
+
+            }
+        }
+    </script>
+    <title>あいうえおカウント</title>
 </head>
+
 <body>
-<table border="2" cellspacing="0" style="font-size: 24pt; border-color:#4b0082; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
-    <tr>
-        <td name="td_hiragana" data-count="0" data-hiragana="わ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">わ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ら" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ら</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="や" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">や</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ま" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ま</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="は" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">は</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="な" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">な</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="た" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">た</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="さ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">さ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="か" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">か</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="あ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">あ</td>
-    </tr>
-    <tr>
-        <td name="td_space">　</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="り" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">り</td>
-        <td name="td_space">　</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="み" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">み</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ひ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ひ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="に" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">に</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ち" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ち</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="し" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">し</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="き" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">き</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="い" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">い</td>
-    </tr>
-    <tr>
-        <td name="td_hiragana" data-count="0" data-hiragana="を" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">を</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="る" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">る</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ゆ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ゆ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="む" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">む</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ふ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ふ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ぬ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ぬ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="つ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">つ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="す" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">す</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="く" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">く</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="う" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">う</td>
-    </tr>
-    <tr>
-        <td name="td_space">　</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="れ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">れ</td>
-        <td name="td_space">　</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="め" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">め</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="へ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">へ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ね" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ね</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="て" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">て</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="せ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">せ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="け" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">け</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="え" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">え</td>
-    </tr>
-    <tr>
-        <td name="td_hiragana" data-count="0" data-hiragana="ん" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ん</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ろ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ろ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="よ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">よ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="も" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">も</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="ほ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">ほ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="の" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">の</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="と" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">と</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="そ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">そ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="こ" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">こ</td>
-        <td name="td_hiragana" data-count="0" data-hiragana="お" onclick="hiragana_click(this);" oncontextmenu="hiragana_leftclick(this);">お</td>
-    </tr>
-</table>
-<br><br><br><br><br><br>
-<!--<button onclick="view_count();" >カウント表示</button>
-<button onclick="view_hiragana();">ひらがな表示</button> -->
-<br>
-<table>
-    <tr>
-        <th>合計</th><td name="sum_td" data-total_count="0">0</td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td>
+                <table border="2" cellspacing="0"
+                    style="font-size: 48pt; border-color:#4b0082; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="わ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">わ</td>
+                        <td name="td_char" data-count="0" data-char="ら" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ら</td>
+                        <td name="td_char" data-count="0" data-char="や" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">や</td>
+                        <td name="td_char" data-count="0" data-char="ま" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ま</td>
+                        <td name="td_char" data-count="0" data-char="は" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">は</td>
+                        <td name="td_char" data-count="0" data-char="な" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">な</td>
+                        <td name="td_char" data-count="0" data-char="た" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">た</td>
+                        <td name="td_char" data-count="0" data-char="さ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">さ</td>
+                        <td name="td_char" data-count="0" data-char="か" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">か</td>
+                        <td name="td_char" data-count="0" data-char="あ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">あ</td>
+                    </tr>
+                    <tr>
+                        <td name="td_space">　</td>
+                        <td name="td_char" data-count="0" data-char="り" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">り</td>
+                        <td name="td_space">　</td>
+                        <td name="td_char" data-count="0" data-char="み" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">み</td>
+                        <td name="td_char" data-count="0" data-char="ひ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ひ</td>
+                        <td name="td_char" data-count="0" data-char="に" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">に</td>
+                        <td name="td_char" data-count="0" data-char="ち" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ち</td>
+                        <td name="td_char" data-count="0" data-char="し" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">し</td>
+                        <td name="td_char" data-count="0" data-char="き" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">き</td>
+                        <td name="td_char" data-count="0" data-char="い" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">い</td>
+                    </tr>
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="を" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">を</td>
+                        <td name="td_char" data-count="0" data-char="る" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">る</td>
+                        <td name="td_char" data-count="0" data-char="ゆ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ゆ</td>
+                        <td name="td_char" data-count="0" data-char="む" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">む</td>
+                        <td name="td_char" data-count="0" data-char="ふ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ふ</td>
+                        <td name="td_char" data-count="0" data-char="ぬ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ぬ</td>
+                        <td name="td_char" data-count="0" data-char="つ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">つ</td>
+                        <td name="td_char" data-count="0" data-char="す" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">す</td>
+                        <td name="td_char" data-count="0" data-char="く" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">く</td>
+                        <td name="td_char" data-count="0" data-char="う" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">う</td>
+                    </tr>
+                    <tr>
+                        <td name="td_space">　</td>
+                        <td name="td_char" data-count="0" data-char="れ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">れ</td>
+                        <td name="td_space">　</td>
+                        <td name="td_char" data-count="0" data-char="め" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">め</td>
+                        <td name="td_char" data-count="0" data-char="へ" onclick="chaFr_click(this);"
+                            oncontextmenu="char_leftclick(this);">へ</td>
+                        <td name="td_char" data-count="0" data-char="ね" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ね</td>
+                        <td name="td_char" data-count="0" data-char="て" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">て</td>
+                        <td name="td_char" data-count="0" data-char="せ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">せ</td>
+                        <td name="td_char" data-count="0" data-char="け" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">け</td>
+                        <td name="td_char" data-count="0" data-char="え" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">え</td>
+                    </tr>
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="ん" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ん</td>
+                        <td name="td_char" data-count="0" data-char="ろ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ろ</td>
+                        <td name="td_char" data-count="0" data-char="よ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">よ</td>
+                        <td name="td_char" data-count="0" data-char="も" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">も</td>
+                        <td name="td_char" data-count="0" data-char="ほ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">ほ</td>
+                        <td name="td_char" data-count="0" data-char="の" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">の</td>
+                        <td name="td_char" data-count="0" data-char="と" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">と</td>
+                        <td name="td_char" data-count="0" data-char="そ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">そ</td>
+                        <td name="td_char" data-count="0" data-char="こ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">こ</td>
+                        <td name="td_char" data-count="0" data-char="お" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">お</td>
+                    </tr>
+                </table>
+            </td>
+            <td>　　　　　　　　　　</td>
+            <td>
+                <table border="2" cellspacing="0"
+                    style="font-size: 48pt; border-color:#4b0082; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="Ａ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ａ</td>
+                        <td name="td_char" data-count="0" data-char="Ｂ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｂ</td>
+                        <td name="td_char" data-count="0" data-char="Ｃ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｃ</td>
+                        <td name="td_char" data-count="0" data-char="Ｄ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｄ</td>
+                        <td name="td_char" data-count="0" data-char="Ｅ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｅ</td>
+                        <td name="td_char" data-count="0" data-char="Ｆ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｆ</td>
+                        <td name="td_char" data-count="0" data-char="Ｇ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｇ</td>
+                        <td name="td_char" data-count="0" data-char="Ｈ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｈ</td>
+                        <td name="td_char" data-count="0" data-char="Ｉ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｉ</td>
+                        <td name="td_char" data-count="0" data-char="Ｊ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｊ</td>
+                    </tr>
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="Ｋ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｋ</td>
+                        <td name="td_char" data-count="0" data-char="Ｌ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｌ</td>
+                        <td name="td_char" data-count="0" data-char="Ｍ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｍ</td>
+                        <td name="td_char" data-count="0" data-char="Ｎ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｎ</td>
+                        <td name="td_char" data-count="0" data-char="Ｏ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｏ</td>
+                        <td name="td_char" data-count="0" data-char="Ｐ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｐ</td>
+                        <td name="td_char" data-count="0" data-char="Ｑ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｑ</td>
+                        <td name="td_char" data-count="0" data-char="Ｒ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｒ</td>
+                        <td name="td_char" data-count="0" data-char="Ｓ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｓ</td>
+                        <td name="td_char" data-count="0" data-char="Ｔ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｔ</td>
+                    </tr>
+                    <tr>
+                        <td name="td_char" data-count="0" data-char="Ｕ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｕ</td>
+                        <td name="td_char" data-count="0" data-char="Ｖ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｖ</td>
+                        <td name="td_char" data-count="0" data-char="Ｗ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｗ</td>
+                        <td name="td_char" data-count="0" data-char="Ｘ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｘ</td>
+                        <td name="td_char" data-count="0" data-char="Ｙ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｙ</td>
+                        <td name="td_char" data-count="0" data-char="Ｚ" onclick="char_click(this);"
+                            oncontextmenu="char_leftclick(this);">Ｚ</td>
+                        <td name="td_space">　</td>
+                        <td name="td_space">　</td>
+                        <td name="td_space">　</td>
+                        <td name="td_space">　</td>
+                    </tr>
+
+                </table>
+
+
+            </td>
+        </tr>
+    </table>
+    <br><br><br><br><br><br>
+    <!--<button onclick="view_count();" >カウント表示</button>
+<button onclick="view_char();">ひらがな表示</button> -->
+    <br>
+    <table>
+        <tr style="font-size: 60pt;font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+            <td name="sum_td" data-total_count="0">0</td>
+        </tr>
+        <tr>
+            <th style="font-size: 24pt; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+                OHAYO</th>
+        </tr>
+    </table>
 </body>
+
 </html>
