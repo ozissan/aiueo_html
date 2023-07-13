@@ -58,6 +58,7 @@
                 // table_data.dataset.count = count // 要素別は色数以上増やしたくない場合はこっちだけあける
                 color_change(table_data)
             }
+            save()
         }
         // 減算するほう
         function char_leftclick(table_data) {
@@ -71,6 +72,7 @@
                 table_data.dataset.count = count
                 color_change(table_data)
             }
+            save()
             event.preventDefault(); // テキストメニューを出さないため
         }
         function color_change(table_data) {
@@ -100,14 +102,56 @@
                 td_items[i].innerText = td_items[i].dataset.char
             }
         }
-        // 現在の数が多い順にひらがなを表示を更新する
-        function view_char_rank() {
+
+        // 保存
+        function save() {
             let td_items = document.getElementsByName("td_char")
             for (let i = 0; i < td_items.length; i++) {
-                td_items[i].innerText = td_items[i].dataset.char
-
+                localStorage.setItem( td_items[i].dataset.char, td_items[i].dataset.count);
             }
         }
+        // 読み込み
+        function load() {
+            initialize()
+            let td_items = document.getElementsByName("td_char")
+            let sum = 0
+            for (let i = 0; i < td_items.length; i++) {
+                var tmp_count = localStorage.getItem( td_items[i].dataset.char);
+                if ( !tmp_count ) {
+                    continue
+                }
+                td_items[i].dataset.count = parseInt(tmp_count)
+                sum += parseInt(tmp_count)
+                color_change( td_items[i] )
+            }
+            let sum_item = document.getElementsByName("sum_td")[0] 
+            sum_item.innerText = sum
+            sum_item.dataset.total_count = sum
+        }
+        function initialize() {
+            // 合計の初期化
+            let sum_item = document.getElementsByName("sum_td")[0]   
+            sum_item.innerText = 0
+            sum_item.dataset.total_count = 0
+
+            // 各アイテムの0化
+            let td_items = document.getElementsByName("td_char")
+            for (let i = 0; i < td_items.length; i++) {
+                td_items[i].dataset.count = parseInt(0)
+            }
+        }
+        // 削除
+        function data_delete() {
+            initialize()
+            let td_items = document.getElementsByName("td_char")
+            let sum = 0
+            for (let i = 0; i < td_items.length; i++) {
+                localStorage.removeItem( td_items[i].dataset.char);
+                td_items[i].dataset.count = 0
+                color_change(td_items[i])
+            }
+        }
+
     </script>
     <title>あいうえおカウント</title>
 </head>
@@ -189,7 +233,7 @@
                         <td name="td_space">　</td>
                         <td name="td_char" data-count="0" data-char="め" onclick="char_click(this);"
                             oncontextmenu="char_leftclick(this);">め</td>
-                        <td name="td_char" data-count="0" data-char="へ" onclick="char_click(this);"
+                        <td name="td_char" data-count="0" data-char="へ" onclick="chaFr_click(this);"
                             oncontextmenu="char_leftclick(this);">へ</td>
                         <td name="td_char" data-count="0" data-char="ね" onclick="char_click(this);"
                             oncontextmenu="char_leftclick(this);">ね</td>
@@ -302,8 +346,7 @@
 
     </table>
     <br><br><br><br><br><br>
-    <!--<button onclick="view_count();" >カウント表示</button>
-<button onclick="view_char();">ひらがな表示</button> -->
+    
     <br>
     <table>
         <tr style="font-size: 60pt;font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
@@ -314,6 +357,19 @@
                 OHAYO</th>
         </tr>
     </table>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button onclick="view_count();" >カウント表示</button>
+    <button onclick="view_char();">文字表示</button>
+    <button onclick="save();">保存</button>
+    <button onclick="load();">読込</button>
+    <button onclick="data_delete();">初期化</button>
+
 </body>
 
 </html>
