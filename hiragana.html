@@ -45,6 +45,7 @@
             "#6495ed",
             "#dc143c",
         ]
+        const view_rank_count = 72 // ランクで表示したい数
         // 加算する方
         function char_click(table_data) {
             let count = parseInt(table_data.dataset.count)
@@ -53,6 +54,7 @@
             // 全体件数は増やす
             sum_td_change(1)
             table_data.dataset.count = count
+            table_data.title = count
             // 色定義の最大値までは変更する
             if (count < Object.keys(COLOR_TABLE).length) {
                 // table_data.dataset.count = count // 要素別は色数以上増やしたくない場合はこっちだけあける
@@ -68,6 +70,7 @@
 
             // 0以下の場合は処理しない
             if (count >= 0) {
+                table_data.title = count
                 sum_td_change(-1)
                 table_data.dataset.count = count
                 color_change(table_data)
@@ -107,7 +110,7 @@
         function save() {
             let td_items = document.getElementsByName("td_char")
             for (let i = 0; i < td_items.length; i++) {
-                localStorage.setItem( td_items[i].dataset.char, td_items[i].dataset.count);
+                localStorage.setItem(td_items[i].dataset.char, td_items[i].dataset.count);
             }
         }
         // 読み込み
@@ -116,21 +119,23 @@
             let td_items = document.getElementsByName("td_char")
             let sum = 0
             for (let i = 0; i < td_items.length; i++) {
-                var tmp_count = localStorage.getItem( td_items[i].dataset.char);
-                if ( !tmp_count ) {
+                var tmp_count = localStorage.getItem(td_items[i].dataset.char);
+                if (!tmp_count) {
                     continue
                 }
                 td_items[i].dataset.count = parseInt(tmp_count)
+                td_items[i].title = td_items[i].dataset.count
                 sum += parseInt(tmp_count)
-                color_change( td_items[i] )
+                color_change(td_items[i])
+                
             }
-            let sum_item = document.getElementsByName("sum_td")[0] 
+            let sum_item = document.getElementsByName("sum_td")[0]
             sum_item.innerText = sum
             sum_item.dataset.total_count = sum
         }
         function initialize() {
             // 合計の初期化
-            let sum_item = document.getElementsByName("sum_td")[0]   
+            let sum_item = document.getElementsByName("sum_td")[0]
             sum_item.innerText = 0
             sum_item.dataset.total_count = 0
 
@@ -142,16 +147,70 @@
         }
         // 削除
         function data_delete() {
+            if (!window.confirm("データが削除され、初期化されますがよろしいですか？")) {
+                return
+            }
             initialize()
             let td_items = document.getElementsByName("td_char")
             let sum = 0
             for (let i = 0; i < td_items.length; i++) {
-                localStorage.removeItem( td_items[i].dataset.char);
+                localStorage.removeItem(td_items[i].dataset.char);
                 td_items[i].dataset.count = 0
                 color_change(td_items[i])
             }
         }
+        // ランキング表示用
+        function view_rank() {
+            let td_items = document.getElementsByName("td_char")
+            let sort_item =[]
+            for (let i = 0; i < td_items.length; i++) {
+                sort_item.push({char:td_items[i].dataset.char, count:td_items[i].dataset.count})
+            }
+            
+            sort_item.sort(function (a, b){
+                // 降順ソート
+                return b.count - a.count
+                // 昇順ソート
+                //return a.count - b.count
+            })
 
+            for (let i = 0; i < view_rank_count; i++ ) {
+                let tmp_tr = document.createElement("tr")
+                let tmp_td_char = document.createElement("td")
+                let tmp_td_count = document.createElement("td")
+                let tmp_td_rank = document.createElement("td")
+
+                //tmp_td.innerText = (i + 1) + '　' + sort_item[i].char + '　' + sort_item[i].count
+                tmp_td_char.innerText = sort_item[i].char
+                tmp_td_count.innerText = sort_item[i].count
+                tmp_td_rank.innerText = i + 1
+                tmp_tr.bgColor = COLOR_TABLE[sort_item[i].count] 
+                
+                
+                tmp_tr.appendChild(tmp_td_rank)
+                tmp_tr.appendChild(tmp_td_char)
+                tmp_tr.appendChild(tmp_td_count)
+                //tmp_tr.appendChild(tmp_td_char)
+                document.getElementById("rank_table").appendChild(tmp_tr)
+                
+            }
+
+            document.getElementById('view_rank').style.visibility = 'hidden'
+            document.getElementById('unview_rank').style.visibility = 'visible'
+        }
+        // ランキング非表示処理
+        function unview_rank (){
+            let rank_table = document.getElementById("rank_table")
+            // <table>内の全ての<tr>要素を取得
+            let rows = rank_table.querySelectorAll('tr');
+
+            // 各<tr>要素をループして削除
+            rows.forEach(function(row) {
+                rank_table.removeChild(row);
+            });
+            document.getElementById('view_rank').style.visibility = 'visible'
+            document.getElementById('unview_rank').style.visibility = 'hidden'
+        }
     </script>
     <title>あいうえおカウント</title>
 </head>
@@ -343,10 +402,10 @@
                 </table>
             </td>
         </tr>
-
     </table>
+
     <br><br><br><br><br><br>
-    
+
     <br>
     <table>
         <tr style="font-size: 60pt;font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
@@ -364,9 +423,14 @@
     <br>
     <br>
     <br>
-    <!--<button onclick="view_count();" >カウント表示</button>
+    <button onclick="view_rank();"　 id="view_rank">ランク表示</button><br>
+    <table id="rank_table" style="border-collapse: collapse;font-size: 52pt; border-color:#4b0082; font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+    </table>
+    <button onclick="unview_rank();" id="unview_rank" style="visibility : hidden;">ランク非表示</button>
+    <br><br><br><br><br><br><br><br>
+    <button onclick="view_count();" >カウント表示</button>
     <button onclick="view_char();">文字表示</button>
-    <button onclick="save();">保存</button>
+    <!--<button onclick="save();">保存</button>
     <button onclick="load();">読込</button>-->
     <button onclick="data_delete();">初期化</button>
 
