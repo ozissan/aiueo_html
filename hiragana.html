@@ -132,6 +132,21 @@
             let sum_item = document.getElementsByName("sum_td")[0]
             sum_item.innerText = sum
             sum_item.dataset.total_count = sum
+            make_color_table()
+        }
+        function make_color_table() {
+            let tmp_tr = document.createElement("tr")
+            for(let i = 0; i < COLOR_TABLE.length; i++ ) {
+                let tmp_td = document.createElement("td")
+                tmp_td.style.backgroundColor = COLOR_TABLE[i]
+                // 開始色が白だと何もないように見えるので0を出す
+                tmp_td.innerText = i == 0 ? "0" :"　"
+                // 0を出さない場合はこっち
+                //tmp_td.innerText = "　"
+                tmp_tr.appendChild(tmp_td)
+            }
+            document.getElementById("color_table").appendChild(tmp_tr)
+
         }
         function initialize() {
             // 合計の初期化
@@ -216,7 +231,7 @@
 </head>
 
 <body onload="load()">
-    <table>
+    <table witdh="480" style="border-collapse: collapse; table-layout: fixed;">
         <tr>
             <td>
                 <table border="2" cellspacing="0"
@@ -402,13 +417,21 @@
                 </table>
             </td>
         </tr>
+        <tr>
+            <td><br></td>
+        </tr>
+        <tr>
+            <!-- 横幅を変更した場合はwidthのpxを変更する-->
+            <table width="680px" style="font-size: 26pt; border-collapse: collapse; table-layout: fixed;" id="color_table">
+            </table>
+        </tr>
     </table>
 
     <br><br><br><br><br><br>
 
     <br>
-    <table>
-        <tr style="font-size: 60pt;font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+    <table style="font-size: 60pt;font-family:'UD デジタル 教科書体 N-R'; text-align :center; vertical-align: center;">
+        <tr >
             <td name="sum_td" data-total_count="0">0</td>
         </tr>
         <tr>
